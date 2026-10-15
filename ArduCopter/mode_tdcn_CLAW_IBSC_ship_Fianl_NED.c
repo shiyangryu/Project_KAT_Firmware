@@ -212,13 +212,45 @@ void CLAW_step(void)
                내리고 실제 대입은 가속도 계산 직전에 한다. */
             stv_old_valid = false;
 
-            for (int i = 0; i < 4; i++) {
+           /* (민성희 수정코자 예전버전 Block)
+           for (int i = 0; i < 4; i++) {
                 TV_BSC[i] = 0.0;
                 Xtraj[i] = 0.0;
                 dXtraj[i] = 0.0;
                 ddXtraj[i] = 0.0;
                 Prev_CTRL[i] = 0.0;
+            }*/
+
+            /* 상대 위치 및 속도 임시 계산을 위한 선행 대입*/
+            STV[9] = 0.0;
+            STV[10] = 0.0;
+            STV[11] = 0.0;
+
+            STV[6] = (double)CLAW_U.Roll;
+            STV[7] = (double)CLAW_U.Pitch;
+            STV[8] = wrapToPi((double)CLAW_U.DR_heading_f.DR_heading);
+
+            /* =========================================================================
+            // [핵심 수정] 제어기 활성화(시작) 첫 순간: 명령필터 상태를 현재 기체 상태로 강제 동기화
+            // -> 0부터 시작해 생기는 10m 이상의 순간 오차(Step Jump) 및 급상승 방지
+             =========================================================================*/
+            Xtraj[0] = STV[11];   /* Z축 위치(고도) */
+            Xtraj[1] = STV[6];    /* Roll 각도 */
+            Xtraj[2] = STV[7];    /* Pitch 각도 */
+            Xtraj[3] = STV[8];    /* Yaw 각도 */
+
+            dXtraj[0] = 0.0;      /* 초기 수직 속도 에러 방지*/
+            dXtraj[1] = 0.0;
+            dXtraj[2] = 0.0;
+            dXtraj[3] = 0.0;
+
+            for (int i = 0; i < 4; i++) {
+                TV_BSC[i] = 0.0;
+                ddXtraj[i] = 0.0;
+                Prev_CTRL[i] = 0.0;
             }
+           /* 윗 부분 수정함*/
+            
             home_init = true;
         }
     }
