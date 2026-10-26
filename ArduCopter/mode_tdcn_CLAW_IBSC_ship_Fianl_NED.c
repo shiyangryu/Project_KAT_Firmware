@@ -545,16 +545,23 @@ void CLAW_step(void)
     f[0] = 0.0; f[1] = 0.0; f[2] = 0.0; f[3] = 0.0;
 
     double u_temp[4];
-    u_temp[0] = k2_gain[2] * z2[0] + z1[0] / q_gain[2] - alpha_dot[0] - Acc_0[0];
-    u_temp[1] = k2_gain[3] * z2[1] + z1[1] / q_gain[3] - alpha_dot[1] - Acc_0[1];
-    u_temp[2] = k2_gain[4] * z2[2] + z1[2] / q_gain[4] - alpha_dot[2] - Acc_0[2];
-    u_temp[3] = k2_gain[5] * z2[3] + z1[3] / q_gain[5] - alpha_dot[3] - Acc_0[3];
+    u_temp[0] = k2_gain[2] * z2[0] + z1[0] / q_gain[2] - alpha_dot[0] + Acc_0[0]; /* Acc 앞에 부호 수정함 (류시양) 26.10.26*/
+    u_temp[1] = k2_gain[3] * z2[1] + z1[1] / q_gain[3] - alpha_dot[1] + Acc_0[1]; /* 동일 */
+    u_temp[2] = k2_gain[4] * z2[2] + z1[2] / q_gain[4] - alpha_dot[2] + Acc_0[2]; /* 동일 */
+    u_temp[3] = k2_gain[5] * z2[3] + z1[3] / q_gain[5] - alpha_dot[3] + Acc_0[3]; /* 동일*/
 
     Del_Control[0] = -1.0 * (G_mat_inv[0][0] * u_temp[0] + G_mat_inv[0][1] * u_temp[1] + G_mat_inv[0][2] * u_temp[2] + G_mat_inv[0][3] * u_temp[3]);
     Del_Control[1] = -1.0 * (G_mat_inv[1][0] * u_temp[0] + G_mat_inv[1][1] * u_temp[1] + G_mat_inv[1][2] * u_temp[2] + G_mat_inv[1][3] * u_temp[3]);
     Del_Control[2] = -1.0 * (G_mat_inv[2][0] * u_temp[0] + G_mat_inv[2][1] * u_temp[1] + G_mat_inv[2][2] * u_temp[2] + G_mat_inv[2][3] * u_temp[3]);
     Del_Control[3] = -1.0 * (G_mat_inv[3][0] * u_temp[0] + G_mat_inv[3][1] * u_temp[1] + G_mat_inv[3][2] * u_temp[2] + G_mat_inv[3][3] * u_temp[3]);
 
+   /* 2) 류시양 수정, 누적 제어량 u = u_prev + Δu  (z^-1 피드백 적용, 스케일 전 단위) */
+    double u_cum[4];
+    for (i = 0; i < 4; i++) {
+        u_cum[i] = Prev_CTRL[i] + Del_Control[i];
+    }
+
+    
     for (i = 0; i < 3; i++) STV_OLD[i] = STV[i];
 
     
