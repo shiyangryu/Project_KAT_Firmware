@@ -161,6 +161,7 @@ void CLAW_step(void)
     Cur_Lon = (double)CLAW_U.Cur_Pos.y;
     Cur_Alt = -(double)CLAW_U.Cur_Pos.z;
 
+   /* 류시양 수정 (Arming 부분 누적초기화 및 홈 초기화
     if (Arming == 0) {
         CLAW_Y.v_cmd.cmd_height = 0.0f;
         CLAW_Y.v_cmd.cmd_roll = 0.0f;
@@ -173,6 +174,35 @@ void CLAW_step(void)
         buffer_filled = false;
         return;
     }
+    */
+ /* 류시양 신규 삽입*/
+ /* ============================= */
+if (Arming == 0) {
+    CLAW_Y.v_cmd.cmd_height = 0.0f;
+    CLAW_Y.v_cmd.cmd_roll   = 0.0f;
+    CLAW_Y.v_cmd.cmd_pitch  = 0.0f;
+    CLAW_Y.v_cmd.cmd_yaw    = 0.0f;
+
+    /* 재무장 시 이전 IBSC 제어입력 누적 방지
+       (home_init 블록에서도 0 으로 리셋되지만, 명시적으로 남겨 둠) */
+    for (int i = 0; i < 4; i++) {
+        Prev_CTRL[i] = 0.0;
+    }
+
+    /* 다음 Arm 에서 Home 및 제어기 상태 재초기화 */
+    home_init = false;
+
+    ps_cmd = STV[8];
+
+    for (int i = 0; i < 6; i++) {
+        Est_Acc_Body_Filtered[i] = 0.0;
+    }
+
+    buffer_filled = false;
+    hermite_init_count = 0;   /* init_count 도 함께 리셋 */
+    return;
+}
+ /* ============================= */
 
     if (!home_init) {
         if (fabs(Cur_Lat) > 1.0 && fabs(Cur_Lon) > 1.0) {
