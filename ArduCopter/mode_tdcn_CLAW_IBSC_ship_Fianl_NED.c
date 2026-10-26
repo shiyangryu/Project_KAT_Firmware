@@ -199,7 +199,6 @@ if (Arming == 0) {
     }
 
     buffer_filled = false;
-    init_count = 0;   /* init_count 도 함께 리셋 */
     return;
 }
  /* ============================= */
