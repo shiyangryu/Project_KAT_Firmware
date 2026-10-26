@@ -581,10 +581,10 @@ void CLAW_step(void)
        BSC_B_mat 의 롤 행 부호일 수 있으나 그 파라미터는 건드리지 않기로 해
        여기서 맞춘다.  원본:
            CLAW_Y.v_cmd.cmd_roll = (real32_T)(Del_Control[1] * CLAW_P.BSC_Scale_Roll * 1.0); */
-    CLAW_Y.v_cmd.cmd_height = (real32_T)(Del_Control[0] * CLAW_P.BSC_Scale_Thrust);
-    CLAW_Y.v_cmd.cmd_roll = (real32_T)(Del_Control[1] * CLAW_P.BSC_Scale_Roll * -1.0);
-    CLAW_Y.v_cmd.cmd_pitch = (real32_T)(Del_Control[2] * CLAW_P.BSC_Scale_Pitch * -1.0);
-    CLAW_Y.v_cmd.cmd_yaw = (real32_T)(Del_Control[3] * CLAW_P.BSC_Scale_Yaw * 1.0);
+    CLAW_Y.v_cmd.cmd_height = (real32_T)(u_cum[0] * CLAW_P.BSC_Scale_Thrust);   /*류시양 수정, u_cum*/
+    CLAW_Y.v_cmd.cmd_roll = (real32_T)(u_cum[1] * CLAW_P.BSC_Scale_Roll * -1.0); /* 류시양 수정, u_cum*/
+    CLAW_Y.v_cmd.cmd_pitch = (real32_T)(u_cum[2] * CLAW_P.BSC_Scale_Pitch * -1.0); /* u_cum*/
+    CLAW_Y.v_cmd.cmd_yaw = (real32_T)(u_cum[3] * CLAW_P.BSC_Scale_Yaw * 1.0);  /* u_cum */
 
     if (CLAW_Y.v_cmd.cmd_roll > 1.0F) CLAW_Y.v_cmd.cmd_roll = 1.0F;
     else if (CLAW_Y.v_cmd.cmd_roll < -1.0F) CLAW_Y.v_cmd.cmd_roll = -1.0F;
