@@ -80,7 +80,7 @@ P_CLAW_T CLAW_P = {
 		 0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
 		 0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
 		 } 류시양 */
-* --- [3] System Matrix B : KAT 3Quad (rev.2, 2026-11-12) --- */
+/* --- [3] System Matrix B : KAT 3Quad (rev.2, 2026-11-12) --- */
 /* 12x4 Matrix flattened to 1D array (Row-major)                         */
 /* HETLAS B (15 kg model) rescaled with re-measured airframe data:       */
 /*   mass 15 -> 11.478 kg, Ixx 2.757->0.814, Iyy 2.281->0.793,             */
