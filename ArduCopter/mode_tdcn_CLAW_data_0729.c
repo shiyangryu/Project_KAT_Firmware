@@ -23,34 +23,34 @@ P_CLAW_T CLAW_P = {
     /* --- [1] Scaling Factors --- */
     /* Controller_Var.c           Scale                  (            ) */
     /*  ʿ     Rotor_PWM_max           Ͽ        ʿ  */
-    3.2,  /* BSC_Scale_Thrust */
-    0.25,   /* BSC_Scale_Roll   */
-    0.20,   /* BSC_Scale_Pitch  */
-    0.13,   /* BSC_Scale_Yaw    */
+    0.5,  /* 3.2 BSC_Scale_Thrust */
+    0.1,   /* 0.25 BSC_Scale_Roll   */
+    0.05,   /* 0.2 BSC_Scale_Pitch  */
+    0.01,   /* 0.01 BSC_Scale_Yaw    */
 
     /* --- [ ߰ ] Outer Loop Gains --- */
-    0.3,  /* BSC_K_POS_P :   ġ          */
-    0.01,  /* BSC_K_POS_I :   ġ           */
-    0.4,  /* BSC_K_VEL_P :  ӵ           */
-    0.05,  /* BSC_K_VEL_I :  ӵ            */
+    0.4,  /* 0.3 BSC_K_POS_P :   ġ          */
+    0.02,  /* 0.01 BSC_K_POS_I :   ġ           */
+    0.1,  /* 0.4 BSC_K_VEL_P :  ӵ           */
+    0.005,  /* 0.05 BSC_K_VEL_I :  ӵ            */
     /* [ ߰ ] Anti-Windup Limit */
-    1.0,   /*    б          Ѱ  (  : 5.0m/s             ) */
+    5.0,   /* 1.0   б          Ѱ  (  : 5.0m/s             ) */
 
     /* --- [2] BSC Control Gains (From Controller_Var.c) --- */
     /* Omega */
     0.3,   /* BSC_Ome_XX        2026.04.28 0.5 수정*/
     0.3,   /* BSC_Ome_YY        2026.04.28 0.5 수정*/
     2.0,   /* BSC_Ome_ZZ */
-    9.3,  /* BSC_Ome_PH */
-    12.0,  /* BSC_Ome_TH */
-    3.0,  /* BSC_Ome_PS */
+    2.0,  /* 9.0 BSC_Ome_PH */
+    2.0,  /* 12.0 BSC_Ome_TH */
+    1.5,  /* 3.0 BSC_Ome_PS */
 
     /* Zeta */
     1.015,  /* BSC_Zeta_XX       2026.04.28 0.95 무조건 1근처로 */
     1.015,   /* BSC_Zeta_YY       2026.04.28 0.95 무조건 1근처로 */
-    0.75,  /* BSC_Zeta_ZZ */
-    0.98,  /* BSC_Zeta_PH */
-    0.98,  /* BSC_Zeta_TH */
+    0.8,  /* 0.75 BSC_Zeta_ZZ */
+    0.85,  /* 0.98 BSC_Zeta_PH */
+    0.85,  /* 0.98 BSC_Zeta_TH */
     0.9,  /* BSC_Zeta_PS */
 
     /* Time Constants */
