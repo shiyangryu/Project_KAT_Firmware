@@ -65,6 +65,7 @@ P_CLAW_T CLAW_P = {
     /* Row 3: Moment L (Roll) */
     /* Row 4: Moment M (Pitch) */
     /* Row 5: Moment N (Yaw) */
+    /* 이전의 Hetlas 기반 B 행렬
  	 {
 		 0.473E-14, -.500E-16, 0.764E-24, -.660E-23,
 		 0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
@@ -78,28 +79,33 @@ P_CLAW_T CLAW_P = {
 		 0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
 		 0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
 		 0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
-		 } 
-/* --- [3] System Matrix B : KAT 3Quad (rev.2, 2026-11-12) --- */
-/* 12x4 Matrix flattened to 1D array (Row-major)                         */
-/* HETLAS B (15 kg model) rescaled with re-measured airframe data:       */
-/*   mass 15 -> 11.478 kg, Ixx 2.757->0.814, Iyy 2.281->0.793,             */
-/* (잠시 무효화) 
+		 } 이전의 Hetals 기반
+    */
+/* --- [3] System Matrix B : KAT 3Quad (FINAL, 2026-11-17) --- */
+/* 12x4, row-major.  Columns: [T R P Y] = CLAW u (Scale = 1 basis)                  */
+/* Structure: CLAW -> mode_tdcn -> ArduPilot QUAD-X mixer -> thrust linearization    */
+/*   (chain verified against flight #64 RCOU to 0.3 us rms)                          */
+/*   B_virtual = B_motor * 0.968 * MIX_AP * diag(0.5, -1, -1, 1)                      */
+/*   mass 11.478 kg, Ixx 0.814 / Iyy 0.793 / Izz 1.385 kg m^2, arm 0.379/0.378 m      */
+/*   EXPO 0.65, SPIN 0.15~0.95, PWM 1000~2000 (flight #64 PARM)                      */
+/* Magnitude: rev.3 chain B (mfr local slope 153.6 N per FC throttle) x 0.794         */
+/*   = hover dT/du 122 N per FC throttle (110 N per ESC throttle, flight #64 ESC RPM)  */
+/*   cross-check: Gazebo rev.3 plant 119.5 N per FC throttle (x0.778)                  */
+/* Row 2: Z, 3: L (Roll), 4: M (Pitch), 5: N (Yaw)                                    */
     {
         0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
         0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
-        -.513E+02, 0.542E+00, -.830E-08, 0.717E-07,
-        -.240E+01, -.227E+03, -.221E-02, -.186E-03,
-        -.177E-04, -.167E-02, -.148E+03, -.157E+01,
-        0.205E-04, 0.194E-02, 0.710E-01, 0.469E+01,
+        -.206E+02, 0.000E+00, 0.000E+00, 0.000E+00,
+        0.000E+00, -.110E+03, 0.136E-04, -.127E-01,
+        0.000E+00, 0.135E-04, -.113E+03, 0.441E-03,
+        0.000E+00, 0.159E+00, -.552E-02, 0.515E+01,
         0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
         0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
         0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
         0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
         0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00,
         0.000E+00, 0.000E+00, 0.000E+00, 0.000E+00
-    }  // 류시양 신규 B 입력
-  (잠시 무효화) */
-};
+    };  
 
 #include "mode_tdcn_rtwtypes.h" // uint8_T 등을 위해 필요_2026.02.04 수정
 
