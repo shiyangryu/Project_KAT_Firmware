@@ -2043,6 +2043,8 @@ private:
     // state 6 - 추종할 타겟 위치 (EKF origin 기준 NEU cm).  GCS 가 준 위경도를
     // 매 루프 변환해 넣는다.  변환 실패 시 마지막 값을 유지한다.
     Vector3p _track_pos_neu_cm;
+     float _trim_roll_f;    /* 류시양 수정: 진입 전 호버 롤 (rad, 1 Hz LPF) */
+     float _trim_pitch_f;   /* 류시양 수정:  진입 전 호버 피치 (rad, 1 Hz LPF) */
 
     // 추종 비행(state 6) 타겟.  MAV_CMD_USER_1 수신값을 그대로 보관하고
     // Update_Info_for_CLAW() 에서 CLAW_U.Dest_poti_i 로 변환 없이 전달한다.
