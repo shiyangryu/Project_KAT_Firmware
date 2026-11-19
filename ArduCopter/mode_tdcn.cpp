@@ -44,7 +44,14 @@ bool ModeTDCN::init(bool ignore_checks)
     _takeoff_target_neu_cm.zero();
 
     _status = TdcnStatus{};
-
+    
+    /* 류시양 수정 26-11-19 */
+    _trim_roll_f  = ahrs.get_roll();
+    _trim_pitch_f = ahrs.get_pitch();
+    CLAW_U.Trim_Roll  = _trim_roll_f;
+    CLAW_U.Trim_Pitch = _trim_pitch_f;
+    /* 류시양 수정 26-11-19 */
+    
     Arming = 1;
 
     if (_air_entry) {
@@ -82,6 +89,16 @@ void ModeTDCN::run()
 
     // 2. GCS 메시지 점검
     check_gcs_message();     
+
+    /* 류시양 수정 26-22-29、 CLAW 가 롤/피치를 잡기 전까지만 호버 자세를 필터링 (잡은 뒤에는 고정) */
+    if (!(_status.claw_mask & (CLAW_ROLL | CLAW_PITCH))) {
+        const float a = constrain_float(2.0f * M_PI * 1.0f * G_Dt, 0.0f, 1.0f);  // 1 Hz
+        _trim_roll_f  += a * (ahrs.get_roll()  - _trim_roll_f);
+        _trim_pitch_f += a * (ahrs.get_pitch() - _trim_pitch_f);
+        CLAW_U.Trim_Roll  = _trim_roll_f;
+        CLAW_U.Trim_Pitch = _trim_pitch_f;
+    }
+    /* 류시양 수정 26-11-19*/
 
     // 3. state 별 처리
     switch (_state) 
@@ -271,6 +288,12 @@ void ModeTDCN::change_state(State next)
     if (next == _state) {
         return;                
     }
+    /* 류시양 수정 26-11-19 */
+    if (next == State::TRACKING) {
+        home_init = false;   // state 6 재진입 때도 트림·궤적·Prev_CTRL 재초기화
+    }
+    /* 류시양 수정 26-11-19 */
+    
     _state = next;
     _state_entered = true;
     _state_start_ms = AP_HAL::millis();
