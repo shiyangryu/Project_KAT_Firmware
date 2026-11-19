@@ -151,6 +151,8 @@ typedef struct {
     real32_T p;     // Roll ���ӵ� (rad/s)
     real32_T q;     // Pitch ���ӵ� (rad/s)
     real32_T r;     // Yaw ���ӵ� (rad/s)
+    real32_T Trim_Roll;   /* [류시양 추가] CLAW 진입 시 트림 롤 (rad), mode 에서 1 Hz 필터 */
+    real32_T Trim_Pitch;  /* [류시양 추가] CLAW 진입 시 트림 피치 (rad) */
 } ExtU_CLAW_T;
 //----------------------------------------------------------------
 
