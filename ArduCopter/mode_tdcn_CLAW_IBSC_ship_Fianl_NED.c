@@ -191,6 +191,8 @@ if (Arming == 0) {
 
     /* 다음 Arm 에서 Home 및 제어기 상태 재초기화 */
     home_init = false;
+    STV_trim[6] = 0.0;   /* [류시양 추가] 디스아밍 시 트림 해제 */
+    STV_trim[7] = 0.0;   /*류시양 추가*/
 
     ps_cmd = STV[8];
 
@@ -258,6 +260,9 @@ if (Arming == 0) {
             STV[6] = (double)CLAW_U.Roll;
             STV[7] = (double)CLAW_U.Pitch;
             STV[8] = wrapToPi((double)CLAW_U.DR_heading_f.DR_heading);
+            /* [류시양 추가] 진입 트림 고정: 롤/피치 명령 기준을 호버 자세로 */
+            STV_trim[6] = (double)CLAW_U.Trim_Roll;
+            STV_trim[7] = (double)CLAW_U.Trim_Pitch;
 
             /* =========================================================================
             // [핵심 수정] 제어기 활성화(시작) 첫 순간: 명령필터 상태를 현재 기체 상태로 강제 동기화
