@@ -90,9 +90,9 @@ void ModeTDCN::run()
     // 2. GCS 메시지 점검
     check_gcs_message();     
 
-    /* 류시양 수정 26-22-29、 CLAW 가 롤/피치를 잡기 전까지만 호버 자세를 필터링 (잡은 뒤에는 고정) */
+    /* 류시양 수정 26-11-19、 CLAW 가 롤/피치를 잡기 전까지만 호버 자세를 필터링 (잡은 뒤에는 고정) */
     if (!(_status.claw_mask & (CLAW_ROLL | CLAW_PITCH))) {
-        const float a = constrain_float(2.0f * M_PI * 1.0f * G_Dt, 0.0f, 1.0f);  // 1 Hz
+        const float a = calc_lowpass_alpha_dt(G_Dt, 1.0f);   // 1 Hz, = dt/(dt + 1/(2π·fc))
         _trim_roll_f  += a * (ahrs.get_roll()  - _trim_roll_f);
         _trim_pitch_f += a * (ahrs.get_pitch() - _trim_pitch_f);
         CLAW_U.Trim_Roll  = _trim_roll_f;
