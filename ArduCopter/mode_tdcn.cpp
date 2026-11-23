@@ -523,6 +523,23 @@ void ModeTDCN::output_to_motors()
     _status.ap_throttle = attitude_control->get_throttle_in();
 
     const uint8_t mask = _status.claw_mask;
+
+   /* 류시양 수정 [Prev_CTRL 이월] CLAW 가 그 축을 잡기 전까지 ArduPilot 출력(트림 포함)을 1 Hz 로 걸러 둔다.
+      CLAW 가 잡은 뒤에는 고정 (그 루프부터 ArduPilot 은 rate 적분을 비우므로 값이 의미 없음).
+      공중에서만 갱신 (지상에서 0 이 아닌 값이 쌓이지 않도록). */
+    if (!is_disarmed_or_landed()) {
+        const float a = calc_lowpass_alpha_dt(G_Dt, 1.0f);
+        if (!(mask & CLAW_ROLL))  { _seed_roll_f  += a * (_status.ap_roll  - _seed_roll_f);  }
+        if (!(mask & CLAW_PITCH)) { _seed_pitch_f += a * (_status.ap_pitch - _seed_pitch_f); }
+        if (!(mask & CLAW_YAW))   { _seed_yaw_f   += a * (_status.ap_yaw   - _seed_yaw_f);   }
+    } else {
+        _seed_roll_f = _seed_pitch_f = _seed_yaw_f = 0.0f;
+    }
+    CLAW_U.Seed_Roll  = _seed_roll_f;
+    CLAW_U.Seed_Pitch = _seed_pitch_f;
+    CLAW_U.Seed_Yaw   = _seed_yaw_f;
+    /* 류시양 수정 [Prev_CTRL 이월] 끝 */
+
     if (mask & CLAW_ROLL) {
         motors->set_roll(_status.claw_roll);
         motors->set_roll_ff(0.0f);
