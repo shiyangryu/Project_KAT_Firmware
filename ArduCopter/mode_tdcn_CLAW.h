@@ -153,6 +153,10 @@ typedef struct {
     real32_T r;     // Yaw ���ӵ� (rad/s)
     real32_T Trim_Roll;   /* [류시양 추가] CLAW 진입 시 트림 롤 (rad), mode 에서 1 Hz 필터 */
     real32_T Trim_Pitch;  /* [류시양 추가] CLAW 진입 시 트림 피치 (rad) */
+    real32_T Seed_Roll;   /* 류시양[Prev_CTRL 이월] 진입 직전 ArduPilot 롤 출력 (motors 단위 -1~1, 1 Hz LPF) */
+    real32_T Seed_Pitch;  /* 류시양[Prev_CTRL 이월] 진입 직전 ArduPilot 피치 출력 */
+    real32_T Seed_Yaw;    /* 류시양[Prev_CTRL 이월] 진입 직전 ArduPilot 요 출력 */
+
 } ExtU_CLAW_T;
 //----------------------------------------------------------------
 
