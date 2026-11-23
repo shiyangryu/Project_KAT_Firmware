@@ -51,7 +51,10 @@ bool ModeTDCN::init(bool ignore_checks)
     CLAW_U.Trim_Roll  = _trim_roll_f;
     CLAW_U.Trim_Pitch = _trim_pitch_f;
     /* 류시양 수정 26-11-19 */
-    
+    /* [Prev_CTRL 이월] 진입 전 ArduPilot 출력 필터 초기화 */
+    _seed_roll_f = _seed_pitch_f = _seed_yaw_f = 0.0f;             /*류시양 수정*/
+    CLAW_U.Seed_Roll = CLAW_U.Seed_Pitch = CLAW_U.Seed_Yaw = 0.0f; /*류시양 수정*/
+
     Arming = 1;
 
     if (_air_entry) {
