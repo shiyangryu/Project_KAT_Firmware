@@ -283,6 +283,15 @@ if (Arming == 0) {
                 ddXtraj[i] = 0.0;
                 Prev_CTRL[i] = 0.0;
             }
+            /* 류시양 수정 [Prev_CTRL 이월] 진입 직전 ArduPilot 출력(트림)을 누적 제어량의 초기값으로.
+               출력식 cmd_* = u_cum * Scale * 부호 의 역변환: Prev = Seed / (Scale * 부호).
+               -> 진입 첫 루프의 cmd_roll/pitch/yaw = Seed + Scale*부호*Del_Control (불연속 없음).
+               스로틀은 mode_tdcn.cpp 의 thr_bias 가 이미 처리하므로 Prev_CTRL[0] = 0 유지. */
+            if (fabs(CLAW_P.BSC_Scale_Roll)  > 1.0e-6) Prev_CTRL[1] = (double)CLAW_U.Seed_Roll  / (CLAW_P.BSC_Scale_Roll  * -1.0);
+            if (fabs(CLAW_P.BSC_Scale_Pitch) > 1.0e-6) Prev_CTRL[2] = (double)CLAW_U.Seed_Pitch / (CLAW_P.BSC_Scale_Pitch * -1.0);
+            if (fabs(CLAW_P.BSC_Scale_Yaw)   > 1.0e-6) Prev_CTRL[3] = (double)CLAW_U.Seed_Yaw   / (CLAW_P.BSC_Scale_Yaw   *  1.0);
+            /* 류시양 수정 [Prev_CTRL 이월] 끝 */
+            
            /* 윗 부분 수정함*/
             
             home_init = true;
