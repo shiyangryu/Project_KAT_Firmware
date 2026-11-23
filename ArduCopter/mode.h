@@ -2045,6 +2045,10 @@ private:
     Vector3p _track_pos_neu_cm;
      float _trim_roll_f;    /* 류시양 수정: 진입 전 호버 롤 (rad, 1 Hz LPF) */
      float _trim_pitch_f;   /* 류시양 수정:  진입 전 호버 피치 (rad, 1 Hz LPF) */
+     float _seed_roll_f;    /* 류시양[Prev_CTRL 이월] 진입 전 ArduPilot 롤 출력 (-1~1, 1 Hz LPF) */
+     float _seed_pitch_f;   /* 류시양[Prev_CTRL 이월] 진입 전 ArduPilot 피치 출력 */
+     float _seed_yaw_f;     /* 류시양[Prev_CTRL 이월] 진입 전 ArduPilot 요 출력 */
+
 
     // 추종 비행(state 6) 타겟.  MAV_CMD_USER_1 수신값을 그대로 보관하고
     // Update_Info_for_CLAW() 에서 CLAW_U.Dest_poti_i 로 변환 없이 전달한다.
